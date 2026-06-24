@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XChat Users</title>
+</head>
+<body>
+
+<h1>Users</h1>
+
+{% for user in users %}
+
+<p>
+    <a href="{% url 'chat' user.id %}">
+        {{ user.username }}
+    </a>
+</p>
+
+{% endfor %}
+
+</body>
+</html>

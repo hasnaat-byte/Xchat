@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XChat</title>
+</head>
+<body>
+
+<h1>Chat with {{ other_user.username }}</h1>
+
+<hr>
+
+{% for message in messages %}
+
+<p>
+    <strong>{{ message.sender.username }}</strong>
+    :
+    {{ message.text }}
+</p>
+
+{% empty %}
+
+<p>No messages yet.</p>
+
+{% endfor %}
+
+<hr>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <input
+        type="text"
+        name="text"
+        placeholder="Type message..."
+        required
+    >
+
+    <button type="submit">
+        Send
+    </button>
+
+</form>
+
+<br>
+
+<a href="/users/">
+    Back to Users
+</a>
+
+</body>
+</html>
