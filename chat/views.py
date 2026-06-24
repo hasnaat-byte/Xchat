@@ -6,8 +6,18 @@ from django.db.models import Q
 # Create your views here.
 def users(request):
 
-    all_users = User.objects.exclude(
-        id=request.user.id
+    sent_to = Message.objects.filter(
+        sender=request.user
+    ).values_list("receiver", flat=True)
+
+    received_from = Message.objects.filter(
+        receiver=request.user
+    ).values_list("sender", flat=True)
+
+    user_ids = set(sent_to) | set(received_from)
+
+    all_users = User.objects.filter(
+        id__in=user_ids
     )
     return render(
         request,
