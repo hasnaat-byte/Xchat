@@ -1,0 +1,367 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XChat</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ───────────── AUTH WRAPPER ───────────── -->
+  <div id="auth-screen" class="auth-screen{% if user.is_authenticated %} hidden{% endif %}">
+
+    <!-- LOGIN FORM -->
+    <div id="login-panel" class="auth-panel active">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <div class="auth-logo-icon">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+              <path d="M16 2C8.268 2 2 8.268 2 16c0 2.44.65 4.73 1.79 6.71L2 30l7.54-1.75A13.93 13.93 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="currentColor"/>
+              <path d="M11.5 10.5c.3.7 1.1 2.4 1.2 2.6.1.2.1.4 0 .6-.1.2-.2.3-.3.5-.2.2-.3.3-.5.5-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1l.5-.5c.2-.2.4-.3.7-.2.3.1 1.8.85 2.1 1 .3.15.5.2.55.3.05.1.05.6-.15 1.15s-1.15 1.05-1.6 1.1c-.4.05-.9.1-2.8-.6-2.35-.85-3.85-3.2-3.95-3.35-.1-.15-.85-1.1-.85-2.1s.55-1.5.75-1.7c.2-.2.4-.25.55-.25h.35" fill="white"/>
+            </svg>
+          </div>
+          <span class="auth-logo-name">XChat</span>
+        </div>
+        <h1 class="auth-title">Welcome back</h1>
+        <p class="auth-subtitle">Sign in to continue chatting</p>
+
+        <div id="login-error" class="auth-error hidden" role="alert"></div>
+        {% if messages %}
+          {% for message in messages %}
+            <div class="{% if message.tags == 'success' %}auth-success{% else %}auth-error{% endif %}" role="alert">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+         <form method="POST" action="{% url 'login' %}">
+
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="login-username" class="form-label">
+          Username or Email
+        </label>
+
+        <input
+          type="text"
+          id="login-username"
+          name="username"
+          class="form-input"
+          placeholder="Enter your username"
+          autocomplete="username"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="login-password" class="form-label">
+          Password
+        </label>
+
+        <div class="input-with-toggle">
+
+          <input
+            type="password"
+            id="login-password"
+            name="password"
+            class="form-input"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          />
+
+          <button
+            type="button"
+            class="toggle-password"
+            data-target="login-password"
+          >
+            <!-- SVG wahi rehne do -->
+          </button>
+
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn-primary"
+      >
+        Sign In
+      </button>
+
+    </form>
+    <!-- LOGIN FORM END -->
+
+    <p class="auth-switch">
+      Don't have an account?
+
+      <button
+        type="button"
+        class="link-btn"
+        data-switch="register"
+      >
+        Create one
+      </button>
+    </p>
+
+  </div>
+
+</div>
+
+    <!-- REGISTER FORM -->
+    <div id="register-panel" class="auth-panel">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <div class="auth-logo-icon">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+              <path d="M16 2C8.268 2 2 8.268 2 16c0 2.44.65 4.73 1.79 6.71L2 30l7.54-1.75A13.93 13.93 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="currentColor"/>
+              <path d="M11.5 10.5c.3.7 1.1 2.4 1.2 2.6.1.2.1.4 0 .6-.1.2-.2.3-.3.5-.2.2-.3.3-.5.5-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1l.5-.5c.2-.2.4-.3.7-.2.3.1 1.8.85 2.1 1 .3.15.5.2.55.3.05.1.05.6-.15 1.15s-1.15 1.05-1.6 1.1c-.4.05-.9.1-2.8-.6-2.35-.85-3.85-3.2-3.95-3.35-.1-.15-.85-1.1-.85-2.1s.55-1.5.75-1.7c.2-.2.4-.25.55-.25h.35" fill="white"/>
+            </svg>
+          </div>
+          <span class="auth-logo-name">XChat</span>
+        </div>
+        <h1 class="auth-title">Create account</h1>
+        <p class="auth-subtitle">Start messaging in seconds</p>
+
+        <div id="register-error" class="auth-error hidden" role="alert"></div>
+        <div id="register-success" class="auth-success hidden" role="status"></div>
+
+        <form method="POST" action="{% url 'register' %}">
+
+      {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group">
+            <label for="register-first-name" class="form-label">First Name</label>
+            <input type="text" id="register-first-name" name="first_name" class="form-input" placeholder="John" autocomplete="given-name" required />
+          </div>
+          <div class="form-group">
+            <label for="register-last-name" class="form-label">Last Name</label>
+            <input type="text" id="register-last-name" name="last_name" class="form-input" placeholder="Doe" autocomplete="family-name" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="register-username" class="form-label">Username</label>
+          <input type="text" id="register-username" name="username" class="form-input" placeholder="Choose a username" autocomplete="username" required />
+        </div>
+
+        <div class="form-group">
+          <label for="register-email" class="form-label">Email</label>
+          <input type="email" id="register-email" name="email" class="form-input" placeholder="john@example.com" autocomplete="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="register-password" class="form-label">Password</label>
+          <div class="input-with-toggle">
+            <input type="password" id="register-password" name="password1" class="form-input" placeholder="Create a password" autocomplete="new-password" required />
+            <button type="button" class="toggle-password" aria-label="Toggle password visibility" data-target="register-password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="password-strength" id="password-strength" aria-live="polite"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="register-password2" class="form-label">Confirm Password</label>
+          <div class="input-with-toggle">
+            <input type="password" id="register-password2" name="password2" class="form-input" placeholder="Repeat your password" autocomplete="new-password" required />
+            <button type="button" class="toggle-password" aria-label="Toggle password visibility" data-target="register-password2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Create Account</button>
+    </form>
+        <p class="auth-switch">
+          Already have an account?
+          <button type="button" class="link-btn" data-switch="login">Sign in</button>
+        </p>
+      </div>
+    </div>
+
+  </div><!-- /auth-screen -->
+
+
+  <!-- ───────────── CHAT APP ───────────── -->
+  <div id="app-screen" class="app-screen{% if not user.is_authenticated %} hidden{% endif %}">
+
+    <!-- TOP NAVBAR -->
+    <header id="app-navbar" class="app-navbar">
+      <div class="navbar-brand">
+        <div class="navbar-logo-icon">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <path d="M16 2C8.268 2 2 8.268 2 16c0 2.44.65 4.73 1.79 6.71L2 30l7.54-1.75A13.93 13.93 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="currentColor"/>
+            <path d="M11.5 10.5c.3.7 1.1 2.4 1.2 2.6.1.2.1.4 0 .6-.1.2-.2.3-.3.5-.2.2-.3.3-.5.5-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1l.5-.5c.2-.2.4-.3.7-.2.3.1 1.8.85 2.1 1 .3.15.5.2.55.3.05.1.05.6-.15 1.15s-1.15 1.05-1.6 1.1c-.4.05-.9.1-2.8-.6-2.35-.85-3.85-3.2-3.95-3.35-.1-.15-.85-1.1-.85-2.1s.55-1.5.75-1.7c.2-.2.4-.25.55-.25h.35" fill="white"/>
+          </svg>
+        </div>
+        <span class="navbar-title">XChat</span>
+      </div>
+      <div class="navbar-actions">
+        <button class="navbar-icon-btn" id="new-chat-btn" title="New chat" aria-label="Start new chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </button>
+        <div class="navbar-avatar-wrap" id="navbar-avatar-wrap">
+          <div class="avatar avatar-sm" id="navbar-avatar" aria-label="Your profile">
+            <span id="navbar-avatar-initials">?</span>
+          </div>
+          <div class="dropdown-menu" id="profile-dropdown">
+            <div class="dropdown-header">
+              <div class="avatar avatar-md">
+                <span id="dropdown-avatar-initials">?</span>
+              </div>
+              <div>
+                <p class="dropdown-name" id="dropdown-username">User</p>
+                <p class="dropdown-email" id="dropdown-email">email@example.com</p>
+              </div>
+            </div>
+            <hr class="dropdown-divider" />
+            <button class="dropdown-item" id="logout-btn" data-action="logout">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Sign out
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN CHAT LAYOUT -->
+    <main class="app-main">
+
+      <!-- SIDEBAR -->
+      <aside id="chat-sidebar" class="chat-sidebar">
+
+        <!-- Search bar -->
+        <div class="sidebar-search-wrap">
+          <div class="sidebar-search">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input
+              type="search"
+              id="user-search"
+              class="sidebar-search-input"
+              placeholder="Search conversations…"
+              autocomplete="off"
+              aria-label="Search conversations"
+            />
+            <button class="search-clear hidden" id="search-clear" aria-label="Clear search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Users / Conversations list -->
+        <div class="sidebar-list-header">
+          <span>Chats</span>
+          <span id="user-count" class="sidebar-count"></span>
+        </div>
+
+        <ul id="users-list" class="users-list" role="listbox" aria-label="Conversations">
+          <!-- Populated by JS -->
+        </ul>
+
+        <div id="users-empty" class="users-empty hidden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <p>No conversations found</p>
+        </div>
+
+      </aside><!-- /chat-sidebar -->
+
+      <!-- CONVERSATION PANEL -->
+      <section id="conversation-panel" class="conversation-panel">
+
+        <!-- Empty state (no chat selected) -->
+        <div id="no-chat-selected" class="no-chat-selected">
+          <div class="no-chat-icon">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M32 4C16.536 4 4 16.536 4 32c0 4.88 1.3 9.46 3.58 13.42L4 60l15.08-3.5A27.86 27.86 0 0032 60c15.464 0 28-12.536 28-28S47.464 4 32 4z" fill="currentColor" opacity="0.12"/>
+              <path d="M32 4C16.536 4 4 16.536 4 32c0 4.88 1.3 9.46 3.58 13.42L4 60l15.08-3.5A27.86 27.86 0 0032 60c15.464 0 28-12.536 28-28S47.464 4 32 4z" stroke="currentColor" stroke-width="2.5" fill="none"/>
+              <circle cx="22" cy="32" r="2.5" fill="currentColor"/>
+              <circle cx="32" cy="32" r="2.5" fill="currentColor"/>
+              <circle cx="42" cy="32" r="2.5" fill="currentColor"/>
+            </svg>
+          </div>
+          <h2>XChat</h2>
+          <p>Select a conversation to start messaging<br/>or search for someone to chat with.</p>
+        </div>
+
+        <!-- Active chat area (hidden until a chat is selected) -->
+        <div id="active-chat" class="active-chat hidden">
+
+          <!-- Chat header -->
+          <header class="chat-header">
+            <button class="chat-back-btn" id="chat-back-btn" aria-label="Back to conversations">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <div class="chat-header-avatar avatar avatar-md" id="chat-header-avatar">
+              <span id="chat-header-initials"></span>
+            </div>
+            <div class="chat-header-info">
+              <p class="chat-header-name" id="chat-header-name"></p>
+              <p class="chat-header-status" id="chat-header-status">online</p>
+            </div>
+            <div class="chat-header-actions">
+              <button class="navbar-icon-btn" title="Search in chat" aria-label="Search in chat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+              <button class="navbar-icon-btn" title="More options" aria-label="More options">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+              </button>
+            </div>
+          </header>
+
+          <!-- Messages area -->
+          <div id="messages-area" class="messages-area" role="log" aria-live="polite" aria-label="Messages">
+            <!-- Bubbles injected by JS -->
+          </div>
+
+          <!-- Message input bar -->
+          <div class="message-input-bar">
+            <button class="input-icon-btn" title="Attach file" aria-label="Attach file">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+            </button>
+            <div class="message-input-wrap">
+              <textarea
+                id="message-input"
+                class="message-input"
+                placeholder="Type a message…"
+                rows="1"
+                aria-label="Message input"
+                autocomplete="off"
+              ></textarea>
+              <button class="input-icon-btn emoji-btn" title="Emoji" aria-label="Insert emoji">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+              </button>
+            </div>
+            <button id="send-btn" class="send-btn" title="Send message" aria-label="Send message">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+
+        </div><!-- /active-chat -->
+
+      </section><!-- /conversation-panel -->
+
+    </main><!-- /app-main -->
+
+  </div><!-- /app-screen -->
+
+  <script>
+    window.XCHAT_BOOTSTRAP = {
+      authenticated: {{ user.is_authenticated|yesno:"true,false" }},
+      currentUser: {% if user.is_authenticated %}{
+        id: {{ user.id }},
+        username: "{{ user.username|escapejs }}",
+        first_name: "{{ user.first_name|escapejs }}",
+        last_name: "{{ user.last_name|escapejs }}",
+        email: "{{ user.email|escapejs }}"
+      }{% else %}null{% endif %},
+      logoutUrl: "{% url 'logout' %}"
+    };
+  </script>
+  <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
+
