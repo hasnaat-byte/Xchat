@@ -12,6 +12,10 @@
         <b>Bio:</b>
         {{ profile.bio|default:"No bio yet." }}
     </p>
+    <a href="{% url 'edit_profile' %}"
+       class="bg-blue-500 text-white px-4 py-2 rounded">
+        Edit Profile
+    </a>
 
 </div>
 

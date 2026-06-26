@@ -54,3 +54,18 @@ def profile(request):
             "profile":profile
         }
     )
+
+def edit_profile(request):
+    profile = Profile.objects.get(user=request.user)
+    if request.method == "POST":
+
+        profile.bio = request.POST["bio"]
+        profile.save()
+
+    return render(
+        request,
+        "edit_profile.html",
+        {
+            "profile":profile
+        }
+    )
