@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout
+from .models import Profile
 
 def register(request):
     if request.method == "POST":
@@ -42,3 +43,14 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect("login")
+
+def profile(request):
+    profile = Profile.objects.get(user=request.user)
+
+    return render(
+        request,
+        "profile.html",
+        {
+            "profile":profile
+        }
+    )
