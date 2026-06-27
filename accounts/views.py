@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout
 from django.contrib import messages
 
+from .forms import RegisterForm
+
 
 def home(request):
     if request.user.is_authenticated:
@@ -16,13 +18,14 @@ def home(request):
 
 def register(request):
 
-    if request.method == "POST":
+    form = RegisterForm(request.POST)
+    if form.is_valid():
 
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
-        username = request.POST.get("username")
-        email = request.POST.get("email")
-        password1 = request.POST.get("password1")
+        username = form.cleaned_data["username"]
+        email = form.cleaned_data["email"]
+        password = form.cleaned_data["password"]
         password2 = request.POST.get("password2")
 
         if password1 != password2:
