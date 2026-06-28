@@ -149,3 +149,33 @@ def edit_profile(request):
             "form": form
         }
     )
+
+@login_required
+def profile(request):
+
+    profile = request.user.profile
+
+    return render(
+        request,
+        "profile.html",
+        {
+            "profile": profile,
+        }
+    )
+
+@login_required
+def user_profile(request, username):
+
+    user = get_object_or_404(
+       User,
+       username = username 
+    )
+
+    profile = user.profile
+
+    return render(
+        "profile.html",
+        {
+            "profile":profile,
+        }
+    )

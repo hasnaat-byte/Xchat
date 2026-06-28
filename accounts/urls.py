@@ -11,4 +11,6 @@ urlpatterns = [
         views.edit_profile,
         name="edit_profile"
     ),
+    path("profile/", views.profile, name="profile"),
+    path("user/<str:username>/",views.user_profile,name="user_profile"),
 ]
