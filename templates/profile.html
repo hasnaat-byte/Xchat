@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — XChat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/profile-style.css' %}">
+</head>
+<body>
+
+  <!-- ───────────── NAVBAR ───────────── -->
+  <header class="app-navbar">
+    <div class="navbar-brand">
+      <button class="navbar-back-btn" id="nav-back-btn" aria-label="Back to chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <span class="navbar-page-title">Profile</span>
+    </div>
+    <div class="navbar-actions">
+      <button class="navbar-icon-btn" id="edit-profile-nav-btn" title="Edit profile" aria-label="Edit profile">
+        <!-- pencil icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ───────────── PROFILE CONTENT ───────────── -->
+  <main class="profile-main" id="profile-main">
+
+    <!-- ── HERO CARD ── -->
+    <section class="pcard" aria-label="Profile overview">
+      <div class="hero-band"></div>
+
+      <div class="hero-avatar-row">
+        <div class="hero-avatar-ring">
+
+    {% if profile.profile_picture %}
+
+        <img
+            src="{{ profile.profile_picture.url }}"
+            class="avatar-photo"
+            alt="Profile Picture"
+        >
+
+    {% else %}
+
+        <div class="avatar avatar-xl">
+            {{ profile.user.username|first|upper }}
+        </div>
+
+    {% endif %}
+
+    <span class="hero-online-dot"></span>
+
+</div>
+
+      <div class="hero-body">
+        <h1 class="hero-name" id="profile-full-name">{{ profile.user.get_full_name|default:profile.user.username }}</h1>
+        <p class="hero-username" id="profile-username-tag">@{{ profile.user.username }}</p>
+        <span class="online-badge" id="online-badge">
+          <span class="online-badge-dot"></span>
+          <span id="online-badge-label">Online</span>
+        </span>
+      </div>
+
+      <!-- ── STATS ── -->
+      <div class="stats-strip">
+        <div class="stat-item">
+          <span class="stat-num" id="stat-messages">284</span>
+          <span class="stat-lbl">Messages</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="stat-chats">17</span>
+          <span class="stat-lbl">Chats</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="stat-media">43</span>
+          <span class="stat-lbl">Media</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BIO CARD ── -->
+    <section class="pcard" aria-label="About">
+      <p class="pcard-label">About</p>
+      <p class="bio-text" id="profile-bio">{{ profile.bio|default:"Hey there! I'm using XChat. 👋" }}</p>
+    </section>
+
+    <!-- ── ACCOUNT INFO CARD ── -->
+    <section class="pcard" aria-label="Account information">
+      <p class="pcard-label">Account</p>
+
+      <!-- Email -->
+      <div class="info-row">
+        <div class="info-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <div class="info-content">
+          <p class="info-label">Email</p>
+          <p class="info-value" id="profile-email">{{ profile.user.email }}</p>
+        </div>
+      </div>
+
+      <div class="pcard-divider"></div>
+
+      <!-- Phone -->
+      <div class="info-row">
+        <div class="info-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+        </div>
+        <div class="info-content">
+          <p class="info-label">Phone</p>
+          <p class="info-value" id="profile-phone">Not set</p>
+        </div>
+      </div>
+
+      <div class="pcard-divider"></div>
+
+      <!-- Member since -->
+      <div class="info-row">
+        <div class="info-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8"  y1="2" x2="8"  y2="6"/>
+            <line x1="3"  y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <div class="info-content">
+          <p class="info-label">Member since</p>
+          <p class="info-value" id="profile-joined">{{ profile.created_at|date:"F Y" }}</p>
+        </div>
+      </div>
+
+      <div class="pcard-divider"></div>
+
+      <!-- Last seen -->
+      <div class="info-row">
+        <div class="info-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div class="info-content">
+          <p class="info-label">Last seen</p>
+          <p class="info-value" id="profile-last-seen">Just now</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ACTIONS ── -->
+<div class="profile-actions">
+
+    <a href="{% url 'edit_profile' %}" class="btn-outline">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18.5 2.5a2.12 2.12 0 1 1 3 3L8 19l-4 1 1-4L18.5 2.5z"/>
+        </svg>
+
+        Edit Profile
+
+    </a>
+
+    <a href="{% url 'logout' %}" class="btn-danger-outline">
+
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+
+        Sign Out
+
+    </a>
+
+</div>
+
+  </main><!-- /profile-main -->
+
+  <script src="{% static 'js/profile-script.js' %}"></script>
+</body>
+</html>

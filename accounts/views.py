@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from .forms import ProfileForm
+from django.shortcuts import get_object_or_404
 
 
 def home(request):
@@ -134,7 +135,7 @@ def edit_profile(request):
                 "Profile updated successfully."
             )
 
-            return redirect("edit_profile")
+            return redirect("profile")
 
     else:
 
@@ -144,9 +145,10 @@ def edit_profile(request):
 
     return render(
         request,
-        "index.html",
+        "edit_profile.html",
         {
-            "form": form
+            "form": form,
+            "profile":profile,
         }
     )
 

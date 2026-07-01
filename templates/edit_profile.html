@@ -1,0 +1,143 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - XChat</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile-style.css' %}">
+</head>
+
+<body>
+
+<header class="app-navbar">
+
+    <div class="navbar-brand">
+
+        <a href="{% url 'profile' %}" class="navbar-back-btn">
+
+            ←
+
+        </a>
+
+        <span class="navbar-page-title">
+
+            Edit Profile
+
+        </span>
+
+    </div>
+
+</header>
+
+
+<main class="profile-main">
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<div class="pcard edit-avatar-section">
+
+    {% if profile.profile_picture %}
+
+        <img
+            src="{{ profile.profile_picture.url }}"
+            class="avatar-photo avatar-xl"
+        >
+
+    {% else %}
+
+        <div class="avatar avatar-xl">
+
+            {{ request.user.username|first|upper }}
+
+        </div>
+
+    {% endif %}
+
+    <br>
+
+    {{ form.profile_picture }}
+
+</div>
+
+
+
+<div class="pcard edit-form-card">
+
+    <div class="form-group">
+
+        <label>
+
+            Username
+
+        </label>
+
+        <input
+            type="text"
+            value="{{ request.user.username }}"
+            class="form-input form-input-readonly"
+            readonly
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+
+            Email
+
+        </label>
+
+        <input
+            type="email"
+            value="{{ request.user.email }}"
+            class="form-input form-input-readonly"
+            readonly
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+
+            Bio
+
+        </label>
+
+        {{ form.bio }}
+
+    </div>
+
+
+    <div class="save-section">
+
+        <button
+            type="submit"
+            class="btn-primary"
+        >
+
+            Save Changes
+
+        </button>
+
+    </div>
+
+</div>
+
+</form>
+
+</main>
+
+</body>
+
+</html>

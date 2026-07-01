@@ -12,16 +12,14 @@ class ProfileForm(forms.ModelForm):
             "profile_picture",
         ]
 
-class ProfileForm(forms.ModelForm):
-
-    class Meta:
-
-        model = Profile
-
-        fields = [
-            "bio",
-            "profile_picture",
-        ]
+        widgets = {
+            "bio": forms.Textarea(
+                attrs={
+                    "class": "bio-textarea",
+                    "placeholder": "Write something about yourself..."
+                }
+            )
+        }
 
     def clean_profile_picture(self):
 
@@ -29,25 +27,18 @@ class ProfileForm(forms.ModelForm):
 
         if image:
 
-            # Maximum size = 2MB
+            # Max size = 2MB
             if image.size > 2 * 1024 * 1024:
 
                 raise forms.ValidationError(
-                    "Image size must be less than 2MB."
+                    "Image size must be less than 2 MB."
                 )
-            # Allowed file types
+
             allowed_types = [
                 "image/jpeg",
                 "image/png",
                 "image/webp",
-
             ]
 
-            if image.content_type not in allowed_types:
-
-                raise forms.ValidationError(
-                    "Only JPG, PNG and WEBP images are allowed."
-                )
-        
         return image
     
