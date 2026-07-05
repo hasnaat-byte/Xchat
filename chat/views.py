@@ -32,24 +32,24 @@ def serialize_message(message, current_user):
 
 @login_required
 def users(request):
-    query = request.GET.get("q")
+
+    query = request.GET.get("q", "")
+
+    users = User.objects.exclude(
+        id=request.user.id
+    )
 
     if query:
-        all_users = User.objects.filter(
+
+        users = users.filter(
             username__icontains=query
-        ).exclude(
-            id=request.user.id
-        )
-    else:
-        all_users = User.objects.exclude(
-            id=request.user.id
         )
 
     return render(
         request,
-        "index.html",
+        "users.html",
         {
-            "users": all_users,
+            "users": users,
             "query": query,
         }
     )
