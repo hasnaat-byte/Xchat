@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Users</h2>
+
+<form method="GET">
+
+    <input
+        type="text"
+        name="q"
+        placeholder="Search users..."
+        value="{{ query }}"
+    >
+
+    <button type="submit">
+
+        Search
+
+    </button>
+
+</form>
+
+{% for user in users %}
+
+    <div>
+
+        {{ user.username }}
+
+    </div>
+
+{% empty %}
+
+    <p>No users found.</p>
+
+{% endfor %}
+
+{% endblock %}
