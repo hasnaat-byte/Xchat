@@ -173,11 +173,9 @@ def user_profile(request, username):
        username = username 
     )
 
-    profile = user.profile
-
     return render(
         "profile.html",
         {
-            "profile":profile,
+            "profile":user.profile,
         }
     )
