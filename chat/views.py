@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 
 from .models import Message
-
+from .models import Conversation
 
 def serialize_user(user):
     return {
@@ -145,3 +145,44 @@ def chat_room(request, user_id):
             "messages": messages,
         }
     )
+
+@login_required
+def start_conversation(request, username):
+
+    other_user = get_object_or_404(
+        User,
+        username=username
+    )
+
+    # Prevent chatting with yourself
+    if other_user == request.user:
+        return redirect("users")
+    
+    conversations = Conversation.objects.filter(
+        participants = request.user
+    )
+
+    conversations = None
+
+    for conv in conversations:
+
+        participants = conv.participants.all()
+
+        if participants.count() == 2 and other_user in participants:
+
+            conversation = conv
+            break
+        
+        if conversation is None:
+
+            conversation = Conversation.objects.create()
+
+            conversation.participants.add(
+                request.user,
+                other_user
+            )
+
+        return redirect(
+            "chat_room",
+            conversation.id
+        )
