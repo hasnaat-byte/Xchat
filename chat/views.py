@@ -101,50 +101,46 @@ def api_send_message(request, user_id):
 
 
 @login_required
-def chat_room(request, user_id):
+def chat_room(request, conversation_id):
 
-    other_user = get_object_or_404(
-        User,
-        id=user_id
+    conversation = get_object_or_404(
+        Conversation,
+        id=conversation_id
     )
+
+    # Security check
+    if request.user not in conversation.participants.all():
+        return redirect("users")
 
     if request.method == "POST":
 
-        text = request.POST.get("text")
+        content = request.POST.get("content")
 
-        Message.objects.create(
-            sender=request.user,
-            receiver=other_user,
-            text=text
-        )
+        if content:
 
-        return redirect(
-            "chat",
-            user_id=user_id
-        )
+            Message.objects.create(
+                conversation=conversation,
+                sender=request.user,
+                content=content
+            )
 
-    messages = Message.objects.filter(
+            return redirect(
+                "chat_room",
+                conversation_id
+            )
 
-        Q(
-            sender=request.user,
-            receiver=other_user
-        )
-        |
-        Q(
-            sender=other_user,
-            receiver=request.user
-        )
 
-    ).order_by("created_at")
+    messages = conversation.messages.all()
 
     return render(
         request,
-        "index.html",
+        "chat_room.html",
         {
-            "other_user": other_user,
-            "messages": messages,
+            "conversation":conversation,
+            "messages":messages,
         }
-    )
+
+    )    
 
 @login_required
 def start_conversation(request, username):

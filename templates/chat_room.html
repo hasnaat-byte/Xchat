@@ -1,0 +1,41 @@
+<h1>Chat</h1>
+
+<hr>
+
+{% for message in messages %}
+
+    <p>
+
+        <strong>
+            {{ message.sender.username }}
+        </strong>
+
+        :
+
+        {{ message.content }}
+
+    </p>
+
+{% empty %}
+
+    <p>No messages yet.</p>
+
+{% endfor %}
+
+<hr>
+
+<form method="POST">
+
+    {% csrf_token %}
+
+    <input
+        type="text"
+        name="content"
+        placeholder="Type a message..."
+    >
+
+    <button type="submit">
+        Send
+    </button>
+
+</form>
