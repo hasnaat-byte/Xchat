@@ -150,35 +150,37 @@ def start_conversation(request, username):
         username=username
     )
 
-    # Prevent chatting with yourself
     if other_user == request.user:
         return redirect("users")
-    
-    conversations = Conversation.objects.filter(
-        participants = request.user
-    )
 
-    conversations = None
+    conversation = None
+
+    conversations = Conversation.objects.filter(
+        participants=request.user
+    )
 
     for conv in conversations:
 
         participants = conv.participants.all()
 
-        if participants.count() == 2 and other_user in participants:
+        if (
+            participants.count() == 2
+            and other_user in participants
+        ):
 
             conversation = conv
             break
-        
-        if conversation is None:
 
-            conversation = Conversation.objects.create()
+    if conversation is None:
 
-            conversation.participants.add(
-                request.user,
-                other_user
-            )
+        conversation = Conversation.objects.create()
 
-        return redirect(
-            "chat_room",
-            conversation.id
+        conversation.participants.add(
+            request.user,
+            other_user
         )
+
+    return redirect(
+        "chat_room",
+        conversation.id
+    )
