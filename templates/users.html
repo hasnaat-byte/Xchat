@@ -2,36 +2,29 @@
 
 {% block content %}
 
-<h2>Users</h2>
+<h1>Users</h1>
 
 <form method="GET">
-
     <input
         type="text"
         name="q"
-        placeholder="Search users..."
+        placeholder="Search..."
         value="{{ query }}"
     >
-
-    <button type="submit">
-
-        Search
-
-    </button>
-
+    <button>Search</button>
 </form>
 
 {% for user in users %}
 
-    <div>
-
+<p>
+    <a href="{% url 'user_profile' user.username %}">
         {{ user.username }}
-
-    </div>
+    </a>
+</p>
 
 {% empty %}
 
-    <p>No users found.</p>
+<p>No users found.</p>
 
 {% endfor %}
 

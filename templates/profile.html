@@ -167,6 +167,13 @@
     <!-- ── ACTIONS ── -->
 <div class="profile-actions">
 
+      {% if request.user != profile.user %}
+    <a href="{% url 'start_conversation' profile.user.username %}"
+       class="btn-primary">
+        Message
+    </a>
+    {% endif %}
+
     <a href="{% url 'edit_profile' %}" class="btn-outline">
 
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

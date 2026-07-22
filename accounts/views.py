@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import ProfileForm
 from django.shortcuts import get_object_or_404
+from .models import Profile
 
 
 def home(request):
@@ -116,7 +117,8 @@ def user_logout(request):
 @login_required
 def edit_profile(request):
 
-    profile = request.user.profile
+    profile, created = Profile.objects.get_or_create(
+    user=request.user)
 
     if request.method == "POST":
 
@@ -155,7 +157,9 @@ def edit_profile(request):
 @login_required
 def profile(request):
 
-    profile = request.user.profile
+    profile, created = Profile.objects.get_or_create(
+        user=request.user
+    )
 
     return render(
         request,

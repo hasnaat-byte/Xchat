@@ -1,24 +1,30 @@
-<h1>Chat</h1>
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+    Chat with {{ other_user.username }}
+</h1>
 
 <hr>
 
 {% for message in messages %}
 
-    <p>
+<p>
 
-        <strong>
-            {{ message.sender.username }}
-        </strong>
+    <strong>
+        {{ message.sender.username }}
+    </strong>
 
-        :
+    :
 
-        {{ message.content }}
+    {{ message.content }}
 
-    </p>
+</p>
 
 {% empty %}
 
-    <p>No messages yet.</p>
+<p>No messages yet.</p>
 
 {% endfor %}
 
@@ -31,7 +37,7 @@
     <input
         type="text"
         name="content"
-        placeholder="Type a message..."
+        placeholder="Type message..."
     >
 
     <button type="submit">
@@ -39,3 +45,4 @@
     </button>
 
 </form>
+{% endblock %}

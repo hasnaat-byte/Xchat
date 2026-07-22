@@ -108,7 +108,6 @@ def chat_room(request, conversation_id):
         id=conversation_id
     )
 
-    # Security check
     if request.user not in conversation.participants.all():
         return redirect("users")
 
@@ -126,21 +125,24 @@ def chat_room(request, conversation_id):
 
             return redirect(
                 "chat_room",
-                conversation_id
+                conversation.id
             )
 
-
     messages = conversation.messages.all()
+
+    other_user = conversation.participants.exclude(
+        id=request.user.id
+    ).first()
 
     return render(
         request,
         "chat_room.html",
         {
-            "conversation":conversation,
-            "messages":messages,
+            "conversation": conversation,
+            "messages": messages,
+            "other_user": other_user,
         }
-
-    )    
+    ) 
 
 @login_required
 def start_conversation(request, username):
